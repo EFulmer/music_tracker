@@ -7,6 +7,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
     abort, render_template, flash
 
 import config
+import lastfm
 
 
 app = Flask(__name__)
@@ -19,9 +20,12 @@ def init_db():
         db.commit()
 
 
-@app.route('/artist/<string:artistname>')
-def get_artist_info(artistname):
-    return artistname
+@app.route('/artist_info')
+def get_artist_info():
+    artistname = request.args.get('name')
+    if artistname:
+        return lastfm.get_top_album(artistname)
+    return 'TODO'
 
 
 if __name__ == '__main__':

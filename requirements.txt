@@ -1,2 +1,3 @@
 flask
-lastfmclient
+pylast
+requirements
