@@ -1,8 +1,22 @@
-from .music_tracker import app
+from flask import render_template
+
+import lastfm
+from . import app
+
+
+@app.route('/')
+def index():
+    return 'hello'
+
 
 @app.route('/artist/<string:artist>')
-def get_artist_info(artist):
-    # replace _ with spaces in case we get kanye_west or something
-    # TODO : capitalize properly
-    album = lastfm.get_top_album(artist.replace('_', ' '))
-    return render_template('artist_info.html', artist=artist, album=album)
+def artist_info(artist):
+    info = lastfm.get_artist_info(artist.replace('_', ' '))
+    return render_template('artist_info.html', 
+                           artist=info.artist, 
+                           album=info.title)
+
+
+@app.route('/add_artist')
+def add_artist():
+    pass

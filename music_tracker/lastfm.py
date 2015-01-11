@@ -5,28 +5,18 @@
 
 import pylast
 
-import lastfmcfg
+from . import app
 
 
-network = pylast.LastFMNetwork(api_key=lastfmcfg.API_KEY, 
-    api_secret=lastfmcfg.API_SECRET)
+network = pylast.LastFMNetwork(api_key=app.config['API_KEY'], 
+    api_secret=app.config['API_SECRET'])
 
 
-def get_top_album(artist):
+def get_artist_info(artist):
     """
-    Get the title of artist's top album. Throws pylast.WSError if 
-    artist is not found.
+    Get a Pylast object representing the artist's top album.
+    The object contains other relevant metadata (proper name, etc)
     """
     a = network.get_artist(artist)
     t = a.get_top_albums()
-    return t[0].item.title
-
-
-def get_top_track(artist):
-    """
-    Get the title of artist's top track. Throws pylast.WSError if 
-    artist is not found.
-    """
-    a = network.get_artist(artist)
-    t = a.get_top_tracks()
-    return t[0].item.title
+    return t[0].item
