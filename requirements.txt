@@ -2,3 +2,4 @@ flask
 pylast
 flask-sqlalchemy
 ipython
+flask-wtf
