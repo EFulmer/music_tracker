@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="/add/" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.artist }}
+    <!-- {{ form.submit }} -->
+    <input type="submit">
+</form>
+{% endblock %}

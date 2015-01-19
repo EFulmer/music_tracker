@@ -26,4 +26,4 @@ class UsersArtist(db.Model):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # TODO login stuff ...
+    # TODO login stuff; there are almost certainly Flask plugins for it
