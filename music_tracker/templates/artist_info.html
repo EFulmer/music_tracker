@@ -1,8 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
     <form action="{{ url_for('add_artist') }}" method=post>
-        {{ artist }} - {{ album }}
-        
+        {{ info['artist'] }}
+        <br>
+        Bio (courtesy of Last.fm): {{ info['bio'] }}
+        <br>
+        Top Album: {{ info['album'] }}
+        <br>
+        Top Track: {{ info['track'] }}
+        <br>
+        <a href={{ info['url'] }}>{{ info['artist'] }} on Last.fm</a>
+        <br>
         <input type=submit value="Track {{ artist }}">
     </form>
 {% endblock %}

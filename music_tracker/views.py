@@ -24,7 +24,4 @@ def add_artist():
 @app.route('/artist/<string:artist>')
 def artist_info(artist):
     info = lastfm.get_artist_info(artist.replace('_', ' '))
-    return render_template('artist_info.html', 
-                           artist=info.artist, 
-                           album=info.title)
-
+    return render_template('artist_info.html', info=info)

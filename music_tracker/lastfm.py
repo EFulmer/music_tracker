@@ -1,7 +1,5 @@
+# music_tracker/lastfm.py
 # -*- coding: utf-8 -*-
-
-# TODO poss. useful methods; get_cover_image, get_release_date, 
-# get_url, get_wiki (on t[0].item; which is an Album object)
 
 import pylast
 
@@ -17,6 +15,14 @@ def get_artist_info(artist):
     Get a Pylast object representing the artist's top album.
     The object contains other relevant metadata (proper name, etc)
     """
+    info = {}
     a = network.get_artist(artist)
-    t = a.get_top_albums()
-    return t[0].item
+    album_data = a.get_top_albums()
+    track_data = a.get_top_tracks()
+    bio = a.get_bio('summary')
+    info = { 'artist': track_data[0].item.artist, 
+             'bio': bio, 
+             'album': album_data[0].item.title, 
+             'track': track_data[0].item.title,
+             'url': a.get_url() }
+    return info
