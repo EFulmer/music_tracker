@@ -11,6 +11,10 @@ class EnterArtistForm(Form):
     # submit = SubmitField('Get Artist Info')
 
 
+class AddArtistForm(Form):
+    submit = SubmitField('Add {} To Your List')
+
+
 # lifted from Explore Flask: https://exploreflask.com/forms.html
 class EmailPasswordForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])

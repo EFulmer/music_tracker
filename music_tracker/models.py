@@ -4,6 +4,11 @@
 from . import db
 
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # TODO login stuff; there are almost certainly Flask plugins for it
+
+
 class ArtistInfo(db.Model):
     """Info about a musical artist."""
     id      = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -11,19 +16,16 @@ class ArtistInfo(db.Model):
     album   = db.Column(db.String(128))
     track   = db.Column(db.String(128))
     bio     = db.Column(db.String(1024))
-    yt      = db.Column(db.String(128))
+    youtube = db.Column(db.String(128))
     spotify = db.Column(db.String(128))
     lastfm  = db.Column(db.String(128))
     rym     = db.Column(db.String(128))
 
 
 class UsersArtist(db.Model):
-    id         = db.Column(db.ForeignKey('user.id'))
-    artist     = db.Column(db.ForeignKey('artistInfo.id'))
+    id         = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user       = db.Column(db.ForeignKey(User.id))
+    artist     = db.Column(db.ForeignKey(ArtistInfo.id))
     date_added = db.Column(db.DateTime)
     active     = db.Column(db.Boolean)
 
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # TODO login stuff; there are almost certainly Flask plugins for it
