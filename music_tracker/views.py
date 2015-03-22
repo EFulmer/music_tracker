@@ -16,8 +16,9 @@ def index():
     return 'hello'
 
 
+# TODO login check
 @app.route('/add/', methods=('GET', 'POST'))
-def add_artist():
+def find_artist():
     # TODO errors if not valid
     form = EnterArtistForm()
     if form.validate_on_submit():
@@ -25,6 +26,7 @@ def add_artist():
     return render_template('add.html', form=form)
 
 
+# TODO login check
 @app.route('/artist/<string:artist>', methods=('GET', 'POST'))
 def artist_info(artist):
     form = AddArtistForm()
@@ -33,18 +35,23 @@ def artist_info(artist):
     info = lastfm.get_artist_info(name)
     form.submit.label.text = form.submit.label.text.format(name)
 
+    artist_info = ArtistInfo(name=str(info['artist']), album=info['album'], 
+            track=info['track'], bio=info['bio'], youtube='DUMMY', 
+            spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
+
     if form.validate_on_submit():
-        print 'butts'
-        # dummy info
-        user = User()
-        artist_info = ArtistInfo(name=str(info['artist']), 
-                album=info['album'], track=info['track'], bio=info['bio'], 
-                spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
-        user_artist = UsersArtist(user=user.id, artist=artist_info.id, 
+        user_artist = UsersArtist(user=1, artist=artist_info.id, 
                 date_added=datetime.datetime.now(), active=True)
         db.session.add(artist_info)
         db.session.add(user_artist)
         db.session.commit()
-        print 'success'
+        # TODO redirect to list manage page
+        return 'success'
 
     return render_template('artist_info.html', form=form, info=info)
+
+
+# TODO everything
+@app.route('/my_artists/', methods=('GET', 'POST'))
+def manage_artists():
+    pass
