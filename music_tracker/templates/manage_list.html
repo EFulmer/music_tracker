@@ -1,18 +1,28 @@
 {% extends "layout.html" %}
 {% block body %}
 <form action="" method="POST">
-    {{ form.hidden_tag() }}
-    Artist  Album   Song    Date Added  Deactivate? Delete?
-    <br>
-    {% for artist in form.artists %}
-        {{ artist.artist_name }} 
-        {{ artist.album }}
-        {{ artist.song }}
-        {{ artist.added }}
-        {{ artist.deactivate }}
-        {{ artist.delete }}
-        <br>
-    {% endfor %}
+    <table>
+        {{ form.hidden_tag() }}
+        <tr>
+            <td>Artist</td>
+            <td>Album</td>
+            <td>Song</td>   
+            <td>Date Added</td>
+            <td>Deactivate?</td> 
+            <td>Delete?</td>
+        </tr>
+
+        {% for artist in form.artists %}
+        <tr>
+            <td>{{ artist.artist_name._value() }}</td>
+            <td>{{ artist.album._value() }}</td>
+            <td>{{ artist.song._value() }}</td>
+            <td>{{ artist.added._value() }}</td>
+            <td>{{ artist.deactivate }}</td>
+            <td>{{ artist.delete }}</td>
+        </tr>
+        {% endfor %}
+    </table>
     {{ form.submit }}
 </form>
 {% endblock %}
