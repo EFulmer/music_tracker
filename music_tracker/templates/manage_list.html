@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block body %}
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    Artist  Album   Song    Date Added  Deactivate? Delete?
+    <br>
+    {% for artist in form.artists %}
+        {{ artist.artist_name }} 
+        {{ artist.album }}
+        {{ artist.song }}
+        {{ artist.added }}
+        {{ artist.deactivate }}
+        {{ artist.delete }}
+        <br>
+    {% endfor %}
+    {{ form.submit }}
+</form>
+{% endblock %}

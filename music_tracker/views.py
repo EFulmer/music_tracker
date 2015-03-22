@@ -7,13 +7,14 @@ from flask import render_template, redirect, url_for
 
 import lastfm
 from . import app, db
-from .forms import AddArtistForm, EnterArtistForm
+from .forms import AddArtistForm, ArtistField, EnterArtistForm, ManageArtistsForm
 from .models import ArtistInfo, User, UsersArtist
 
 
+# TODO literally everything
 @app.route('/')
 def index():
-    return 'hello'
+    return 'under construction'
 
 
 # TODO login check
@@ -31,35 +32,44 @@ def find_artist():
 def artist_info(artist):
     form = AddArtistForm()
     name = artist.replace('_', ' ')
-    # TODO check for artist in db before doing this
-    query = ArtistInfo.query.filter(ArtistInfo.name.ilike(name)).all()
-    if not query:
-        info = lastfm.get_artist_info(name)
-        artist_info = ArtistInfo(name=str(info['artist']), album=info['album'], 
-            track=info['track'], bio=info['bio'], youtube='DUMMY', 
-            spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
 
-    artist_info = ArtistInfo(name=str(info['artist']), album=info['album'], 
-            track=info['track'], bio=info['bio'], youtube='DUMMY', 
-            spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
-
+    #try:
+    info = lastfm.get_artist_info(name)
+    name = str(info['artist'])
 
     form.submit.label.text = form.submit.label.text.format(name)
 
-
     if form.validate_on_submit():
-        user_artist = UsersArtist(user=1, artist=artist_info.id, 
+        # TODO dummy user id
+        user_artist = UsersArtist(user=1, artist_name=name, 
+                best_album=info['album'], best_song=info['track'],
                 date_added=datetime.datetime.now(), active=True)
-        db.session.add(artist_info)
         db.session.add(user_artist)
         db.session.commit()
-        # TODO redirect to list manage page
-        return 'success'
+        return redirect(url_for('manage_artists'))
 
     return render_template('artist_info.html', form=form, info=info)
+    #except:
+        # TODO more info about errors (connection error?
+        # artist doesn't exist?) and link back to add artist form.
+        #return 'Error encountered in grabbing artist info'
 
 
 # TODO everything
 @app.route('/my_artists/', methods=('GET', 'POST'))
 def manage_artists():
-    pass
+    # TODO remove dummy User.id
+    # TODO get logged in user's id (User.id)
+    # TODO new page to retrieve all artists, even inactive ones
+    artists = UsersArtist.query.filter(UsersArtist.user == 1) \
+                               .filter(UsersArtist.active).all()
+    form = ManageArtistsForm()
+    for artist in artists:
+        entry = ArtistField()
+        entry.artist_name  = artist.artist_name
+        entry.album        = artist.best_album
+        entry.song         = artist.best_song
+        entry.added        = artist.date_added
+        form.artists.append_entry(entry)
+    return render_template('manage_list.html', form=form)
+
