@@ -65,11 +65,12 @@ def manage_artists():
                                .filter(UsersArtist.active).all()
     form = ManageArtistsForm()
     for artist in artists:
-        entry = ArtistField()
         entry.artist_name  = artist.artist_name
         entry.album        = artist.best_album
         entry.song         = artist.best_song
         entry.added        = artist.date_added
+        entry.deactivate = False
+        entry.delete = False
         form.artists.append_entry(entry)
     return render_template('manage_list.html', form=form)
 

@@ -27,16 +27,12 @@ class ArtistInfoForm(Form):
 
 
 class ArtistField(Form):
-    # artist_name = StringField('Artist Name')
-    # album       = StringField('Top Album')
-    # song        = StringField('Top Song')
-    # added       = DateTimeField('Date Added')
-    artist_name = ''
-    album       = ''
-    song        = ''
-    added       = ''
-    deactivate  = BooleanField('Archive', default=False)
-    delete      = BooleanField('Delete', default=False)
+    artist_name = StringField('Artist Name')
+    album       = StringField('Top Album')
+    song        = StringField('Top Song')
+    added       = DateTimeField('Date Added')
+    deactivate  = BooleanField('Archive')
+    delete      = BooleanField('Delete')
 
 
 class ManageArtistsForm(Form):
