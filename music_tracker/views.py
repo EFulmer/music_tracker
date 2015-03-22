@@ -32,12 +32,20 @@ def artist_info(artist):
     form = AddArtistForm()
     name = artist.replace('_', ' ')
     # TODO check for artist in db before doing this
-    info = lastfm.get_artist_info(name)
-    form.submit.label.text = form.submit.label.text.format(name)
+    query = ArtistInfo.query.filter(ArtistInfo.name.ilike(name)).all()
+    if not query:
+        info = lastfm.get_artist_info(name)
+        artist_info = ArtistInfo(name=str(info['artist']), album=info['album'], 
+            track=info['track'], bio=info['bio'], youtube='DUMMY', 
+            spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
 
     artist_info = ArtistInfo(name=str(info['artist']), album=info['album'], 
             track=info['track'], bio=info['bio'], youtube='DUMMY', 
             spotify='DUMMY', lastfm='DUMMY', rym='DUMMY')
+
+
+    form.submit.label.text = form.submit.label.text.format(name)
+
 
     if form.validate_on_submit():
         user_artist = UsersArtist(user=1, artist=artist_info.id, 
