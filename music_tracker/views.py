@@ -3,7 +3,7 @@
 
 import datetime
 
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, request, url_for
 
 import lastfm
 from . import app, db
@@ -28,6 +28,7 @@ def find_artist():
 
 
 # TODO login check
+# TODO error check
 @app.route('/artist/<string:artist>', methods=('GET', 'POST'))
 def artist_info(artist):
     form = AddArtistForm()
@@ -52,20 +53,22 @@ def artist_info(artist):
     #except:
         # TODO more info about errors (connection error?
         # artist doesn't exist?) and link back to add artist form.
-        #return 'Error encountered in grabbing artist info'
+        #return 'Error encountered'
 
 
 # TODO everything
-@app.route('/my_artists/', methods=('GET', 'POST'))
+@app.route('/my_artists/', methods=('GET',))
 def manage_artists():
     # TODO remove dummy User.id
     # TODO get logged in user's id (User.id)
-    # TODO new page to retrieve all artists, even inactive ones
+    form = ManageArtistsForm()
+    
     artists = UsersArtist.query.filter(UsersArtist.user == 1) \
                                .filter(UsersArtist.active).all()
-    form = ManageArtistsForm()
+
     for artist in artists:
         entry = ArtistField()
+        entry.index        = artist.id
         entry.artist_name  = artist.artist_name
         entry.album        = artist.best_album
         entry.song         = artist.best_song
@@ -74,4 +77,18 @@ def manage_artists():
         entry.delete       = False
         form.artists.append_entry(entry)
     return render_template('manage_list.html', form=form)
+
+
+@app.route('/my_artists/deactivate/<int:artist_id>', methods=('GET', 'POST'))
+def deactivate_artist(artist_id):
+    artist = UsersArtist.query.get(artist_id)
+    artist.active = False
+    db.session.commit()
+    return 'worked'
+
+
+# TODO new page to retrieve all artists, even inactive ones
+@app.route('/my_artists/all', methods=('GET',))
+def all_artists():
+    pass
 

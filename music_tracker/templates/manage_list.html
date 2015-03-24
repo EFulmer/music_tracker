@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<form action="" method="POST">
+<form action="" method="">
     <table>
         {{ form.hidden_tag() }}
         <tr>
@@ -8,8 +8,8 @@
             <td>Album</td>
             <td>Song</td>   
             <td>Date Added</td>
-            <td>Deactivate?</td> 
-            <td>Delete?</td>
+            <!-- <td>Deactivate?</td> -->
+            <!-- <td>Delete?</td> -->
         </tr>
 
         {% for artist in form.artists %}
@@ -18,8 +18,9 @@
             <td>{{ artist.album._value() }}</td>
             <td>{{ artist.song._value() }}</td>
             <td>{{ artist.added._value() }}</td>
-            <td>{{ artist.deactivate }}</td>
-            <td>{{ artist.delete }}</td>
+
+            <td><a href="deactivate/{{ artist.index._value() }}">deactivate</a></td>
+            <!-- <td>{{ artist.delete }}</td> -->
         </tr>
         {% endfor %}
     </table>
