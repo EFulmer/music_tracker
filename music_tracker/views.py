@@ -3,11 +3,11 @@
 
 import datetime
 
-from flask import render_template, redirect, request, url_for
+from flask import flash, render_template, redirect, request, url_for
 
 import lastfm
 from . import app, db
-from .forms import AddArtistForm, ArtistField, EnterArtistForm, ManageArtistsForm
+from .forms import AddArtistForm, EnterArtistForm
 from .models import ArtistInfo, User, UsersArtist
 
 
@@ -56,39 +56,37 @@ def artist_info(artist):
         #return 'Error encountered'
 
 
-# TODO everything
 @app.route('/my_artists/', methods=('GET',))
 def manage_artists():
     # TODO remove dummy User.id
-    # TODO get logged in user's id (User.id)
-    form = ManageArtistsForm()
-    
+    # TODO get logged in user's id (User.id) 
     artists = UsersArtist.query.filter(UsersArtist.user == 1) \
                                .filter(UsersArtist.active).all()
-
-    for artist in artists:
-        entry = ArtistField()
-        entry.index        = artist.id
-        entry.artist_name  = artist.artist_name
-        entry.album        = artist.best_album
-        entry.song         = artist.best_song
-        entry.added        = artist.date_added
-        entry.deactivate   = False
-        entry.delete       = False
-        form.artists.append_entry(entry)
-    return render_template('manage_list.html', form=form)
+    return render_template('manage_list.html', artists=artists)
 
 
-@app.route('/my_artists/deactivate/<int:artist_id>', methods=('GET', 'POST'))
-def deactivate_artist(artist_id):
+@app.route('/my_artists/all/', methods=('GET',))
+def all_artists():
+    # TODO remove dummy User.id
+    # TODO get logged in user's id (User.id)
+    artists = UsersArtist.query.filter(UsersArtist.user == 1).all()
+    return render_template('manage_list.html', artists=artists)
+
+
+@app.route('/my_artists/archive/<int:artist_id>', methods=('GET', 'POST'))
+def archive_artist(artist_id):
     artist = UsersArtist.query.get(artist_id)
     artist.active = False
     db.session.commit()
-    return 'worked'
+    flash('{} archived.'.format(artist.artist_name))
+    return redirect(url_for('manage_artists'))
 
 
-# TODO new page to retrieve all artists, even inactive ones
-@app.route('/my_artists/all', methods=('GET',))
-def all_artists():
-    pass
+@app.route('/my_artists/unarchive/<int:artist_id>', methods=('GET', 'POST'))
+def unarchive_artist(artist_id):
+    artist = UsersArtist.query.get(artist_id)
+    artist.active = True
+    db.session.commit()
+    flash('{} unarchived.'.format(artist.artist_name))
+    return redirect(url_for('manage_artists'))
 

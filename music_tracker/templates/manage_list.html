@@ -2,28 +2,27 @@
 {% block body %}
 <form action="" method="">
     <table>
-        {{ form.hidden_tag() }}
         <tr>
             <td>Artist</td>
             <td>Album</td>
             <td>Song</td>   
             <td>Date Added</td>
-            <!-- <td>Deactivate?</td> -->
-            <!-- <td>Delete?</td> -->
         </tr>
 
-        {% for artist in form.artists %}
+        {% for artist in artists %}
         <tr>
-            <td>{{ artist.artist_name._value() }}</td>
-            <td>{{ artist.album._value() }}</td>
-            <td>{{ artist.song._value() }}</td>
-            <td>{{ artist.added._value() }}</td>
+            <td>{{ artist.artist_name }}</td>
+            <td>{{ artist.best_album }}</td>
+            <td>{{ artist.best_song }}</td>
+            <td>{{ artist.date_added }}</td>
 
-            <td><a href="deactivate/{{ artist.index._value() }}">deactivate</a></td>
-            <!-- <td>{{ artist.delete }}</td> -->
+            {% if not artist.active %}
+                <td><a href="/my_artists/unarchive/{{ artist.id }}">Unarchive</a></td>
+            {% else %}
+                <td><a href="/my_artists/archive/{{ artist.id }}">Archive</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>
-    {{ form.submit }}
 </form>
 {% endblock %}

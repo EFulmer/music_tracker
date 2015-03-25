@@ -42,7 +42,6 @@ class UsersArtist(db.Model):
     active      = db.Column(db.Boolean)
 
     def __repr__(self):
-        return 'UsersArtist: {}'.format(self.artist_name)
         return 'UsersArtist: {} {} {} {} {} {} {}'.format(self.id, self.user,
                 self.artist_name, self.best_album, self.best_song, 
                 self.date_added, self.active)

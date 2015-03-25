@@ -3,7 +3,7 @@
 
 from flask.ext.wtf import Form
 from wtforms.fields import BooleanField, DateTimeField, FieldList, \
-        FormField, PasswordField, StringField, SubmitField
+        FormField, IntegerField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email
 
 
@@ -22,20 +22,12 @@ class EmailPasswordForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
 
 
+# TODO remove superfluous form.
 class ArtistInfoForm(Form):
     submit = SubmitField('Track Artist')
 
 
-class ArtistField(Form):
-    artist_name = StringField('Artist Name')
-    album       = StringField('Top Album')
-    song        = StringField('Top Song')
-    added       = DateTimeField('Date Added')
-    deactivate  = BooleanField('Archive')
-    delete      = BooleanField('Delete')
-
-
+# TODO remove superfluous form.
 class ManageArtistsForm(Form):
-    artists = FieldList(FormField(ArtistField))
     submit = SubmitField('Update')
 
