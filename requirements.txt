@@ -4,3 +4,5 @@ flask-sqlalchemy
 ipython
 flask-wtf
 alembic
+flask-bcrypt
+flask-login

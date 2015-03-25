@@ -3,9 +3,27 @@
 
 from flask.ext.wtf import Form
 from wtforms.fields import BooleanField, DateTimeField, FieldList, \
-        FormField, IntegerField, PasswordField, StringField, SubmitField
-from wtforms.validators import DataRequired, Email
+        FormField, IntegerField, PasswordField, StringField, SubmitField, \
+        TextField, PasswordField
+from wtforms.validators import DataRequired, Email, Required
 
+
+# shamelessly stolen from Explore Flask
+class EmailPasswordForm(Form):
+    email = TextField('Email', validators=[Required(), Email()])
+    password = PasswordField('Password', validators=[Required()])
+
+
+# ditto
+class UsernamePasswordForm(Form):
+    username = TextField('Username', validators=[Required()])
+    password = PasswordField('Password', validators=[Required()])
+
+class EmailForm(Form):
+    email = TextField('Email', validators=[Required(), Email()])
+
+class PasswordForm(Form):
+    password = PasswordField('Email', validators=[Required()])
 
 class EnterArtistForm(Form):
     artist = StringField('artist', validators=[DataRequired()])
@@ -25,9 +43,3 @@ class EmailPasswordForm(Form):
 # TODO remove superfluous form.
 class ArtistInfoForm(Form):
     submit = SubmitField('Track Artist')
-
-
-# TODO remove superfluous form.
-class ManageArtistsForm(Form):
-    submit = SubmitField('Update')
-
