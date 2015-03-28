@@ -6,3 +6,4 @@ flask-wtf
 alembic
 flask-bcrypt
 flask-login
+flask-mail

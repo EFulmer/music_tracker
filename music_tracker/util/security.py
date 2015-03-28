@@ -4,4 +4,4 @@ from itsdangerous import URLSafeTimedSerializer
 
 from .. import app
 
-ts = URLSafeTimedSerializer(app.comfig['SECRET_KEY'])
+ts = URLSafeTimedSerializer(app.config['SECRET_KEY'])

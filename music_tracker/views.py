@@ -5,12 +5,15 @@ import datetime
 
 from flask import abort, flash, render_template, redirect, request, url_for
 from flask.ext.login import login_user
+from flask.ext.mail import Message
+from sqlalchemy.exc import IntegrityError
 
 import lastfm
-from . import app, db
-from .forms import AddArtistForm, EmailForm, EnterArtistForm, PasswordForm
+from . import app, db, mail
+from .forms import AddArtistForm, EmailForm, EmailPasswordForm, \
+        EnterArtistForm, PasswordForm
 from .models import ArtistInfo, User, UsersArtist
-from .util import ts, send_email
+from .util import ts
 
 
 # TODO literally everything
@@ -20,27 +23,33 @@ def index():
 
 
 # shamelessly stolen from Explore Flask
-@app.route('/accounts/create/', methods=('GET', 'POST',))
-def create_account():
+@app.route('/register/', methods=('GET', 'POST',))
+def register():
     form = EmailPasswordForm()
     if form.validate_on_submit():
-        user = User(email=form.email.data, password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
+        email = form.email.data
+        try:
+            user = User(email=email, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            token = ts.dumps(form.email.data, salt='email-confirm-key')
+            confirm_url = url_for('confirm_email', token=token, 
+                    _external=True)
+            html = render_template('email/activate.html', 
+                    confirm_url=confirm_url)
 
-        subject = 'Confirm your email'
+            msg = Message(subject='Confirm your email', recipients=[email,], 
+                    html=html, sender='ericsmusictracker@gmail.com')
+            mail.send(msg)
 
-        token = ts.dumps(self.email, salt='email-confirm-key')
+            flash('Account created! Check your email for a confirmation ' \
+                    'message to activate your account.')
+            return redirect(url_for('index'))
+        except:
+            db.session.rollback()
+            flash('There is already an email account for {}.'.format(email))
 
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-
-        html = render_template('email/activate.html', confirm_url=confirm_url)
-
-        send_email(user.email, subject, html)
-
-        return redirect(url_for('index'))
-
-    return render_template('accounts/create.html', form=form)
+    return render_template('register.html', form=form)
 
 
 # also shamelessly stolen from Explore Flask
@@ -72,7 +81,7 @@ def signup():
 
     return render_template('signup.html', form=form)
 
-@app.route('signin', methods=('GET', 'POST'))
+@app.route('/signin', methods=('GET', 'POST'))
 def signin():
     form = UsernamePasswordForm()
 
@@ -103,7 +112,7 @@ def reset():
         user = User.query.filter_by(email=form.email.data).first_or_404()
         
         subject = 'Password reset requested'
-        token = ts.dumps(self.email, salt='recover-key')
+        token = ts.dumps(form.email.data, salt='recover-key')
         recover_url = url_for('reset_with_token', token=token, _external=True)
         html = render_template('email/recover.html', recover_url=recover_url)
         send_email(user.email, subject, html)
