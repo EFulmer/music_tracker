@@ -2,8 +2,11 @@
 <title>Music Tracker</title>
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
 <div class=page>
-        {% for message in get_flashed_messages() %}
-                <div class=flash>{{ message }}</div>
-        {% endfor %}
-        {% block body %}{% endblock %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </div>
