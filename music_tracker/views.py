@@ -66,36 +66,26 @@ def confirm_email(token):
     db.session.add(user)
     db.session.commit()
 
-    return redirect(url_for('signin'))
+    return redirect(url_for('index'))
 
 
-# still shamelessly lifting from Explore Flask
-@app.route('/signup/', methods=('GET', 'POST',))
-def signup():
+@app.route('/login/', methods=('GET', 'POST'))
+def login():
     form = EmailPasswordForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, password=form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('index'))
-
-    return render_template('signup.html', form=form)
-
-@app.route('/signin', methods=('GET', 'POST'))
-def signin():
-    form = UsernamePasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first_or_404()
+        user = User.query.filter_by(email=form.email.data).first_or_404()
 
         if user.is_correct_password(form.password.data):
+            print 'pass'
             login_user(user)
 
             return redirect(url_for('index'))
         else:
-            return redirect(url_for('signin'))
+            print 'fail'
+            return redirect(url_for('login'))
 
-    return render_template('signin.html', form=form)
+    return render_template('login.html', form=form)
 
 
 @app.route('/signout')

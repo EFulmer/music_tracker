@@ -1,14 +1,15 @@
 # music_tracker/models.py
 # -*- coding: utf-8 -*-
 
+from flask.ext.login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from . import bcrypt, db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id        = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username  = db.Column(db.String(64), unique=True)
+    email     = db.Column(db.String(64), unique=True)
     _password = db.Column(db.String(128))
 
     @hybrid_property
