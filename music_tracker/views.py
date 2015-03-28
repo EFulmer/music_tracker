@@ -4,12 +4,12 @@
 import datetime
 
 from flask import abort, flash, render_template, redirect, request, url_for
-from flask.ext.login import login_user
+from flask.ext.login import current_user, login_required, login_user
 from flask.ext.mail import Message
 from sqlalchemy.exc import IntegrityError
 
 import lastfm
-from . import app, db, mail
+from . import app, db, load_user, mail
 from .forms import AddArtistForm, EmailForm, EmailPasswordForm, \
         EnterArtistForm, PasswordForm
 from .models import ArtistInfo, User, UsersArtist
@@ -88,14 +88,7 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/signout')
-def signout():
-    logout_user()
-
-    return redirect(url_for('index'))
-
-
-@app.route('/reset', methods=('GET', 'POST'))
+@app.route('/reset/', methods=('GET', 'POST'))
 def reset():
     form = EmailForm()
     if form.validate_on_submit():
@@ -132,8 +125,15 @@ def reset_wth_token(token):
     return render_template('reset_with_token.html', form=form, token=token)
 
 
-# TODO login check
+@app.route('/logout/')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
 @app.route('/add/', methods=('GET', 'POST'))
+@login_required
 def find_artist():
     # TODO errors if not valid
     form = EnterArtistForm()
@@ -142,14 +142,13 @@ def find_artist():
     return render_template('add.html', form=form)
 
 
-# TODO login check
 # TODO error check
 @app.route('/artist/<string:artist>', methods=('GET', 'POST'))
+@login_required
 def artist_info(artist):
     form = AddArtistForm()
     name = artist.replace('_', ' ')
 
-    #try:
     info = lastfm.get_artist_info(name)
     name = str(info['artist'])
 
@@ -157,7 +156,7 @@ def artist_info(artist):
 
     if form.validate_on_submit():
         # TODO dummy user id
-        user_artist = UsersArtist(user=1, artist_name=name, 
+        user_artist = UsersArtist(user=current_user.id, artist_name=name, 
                 best_album=info['album'], best_song=info['track'],
                 date_added=datetime.datetime.now(), active=True)
         db.session.add(user_artist)
@@ -165,30 +164,26 @@ def artist_info(artist):
         return redirect(url_for('manage_artists'))
 
     return render_template('artist_info.html', form=form, info=info)
-    #except:
-        # TODO more info about errors (connection error?
-        # artist doesn't exist?) and link back to add artist form.
-        #return 'Error encountered'
 
 
 @app.route('/my_artists/', methods=('GET',))
+@login_required
 def manage_artists():
-    # TODO remove dummy User.id
-    # TODO get logged in user's id (User.id) 
-    artists = UsersArtist.query.filter(UsersArtist.user == 1) \
+    artists = UsersArtist.query.filter(UsersArtist.user == current_user.id) \
                                .filter(UsersArtist.active).all()
     return render_template('manage_list.html', artists=artists)
 
 
 @app.route('/my_artists/all/', methods=('GET',))
+@login_required
 def all_artists():
-    # TODO remove dummy User.id
-    # TODO get logged in user's id (User.id)
-    artists = UsersArtist.query.filter(UsersArtist.user == 1).all()
+    artists = UsersArtist.query.filter(UsersArtist.user == current_user.id)\
+                               .all()
     return render_template('manage_list.html', artists=artists)
 
 
 @app.route('/my_artists/archive/<int:artist_id>', methods=('GET', 'POST'))
+@login_required
 def archive_artist(artist_id):
     artist = UsersArtist.query.get(artist_id)
     artist.active = False
