@@ -1,8 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
+<!-- 
 <form action="/add/" method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.artist }}
-    {{ form.submit }}
 </form>
+-->
+<div class="well">
+    <form class="form-horizontal" action="" method="post" name="/add/">
+        {{ form.hidden_tag() }}
+        {{ form.artist }}
+        {{ form.submit }}
+    </form>
 {% endblock %}
+
