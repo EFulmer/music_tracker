@@ -20,9 +20,13 @@ def get_artist_info(artist):
     album_data = a.get_top_albums()
     track_data = a.get_top_tracks()
     bio = a.get_bio('summary')
+    # TODO remove Last.fm link; either remove or linkify links in 
+    # bio
     info = { 'artist': track_data[0].item.artist, 
              'bio': bio, 
              'album': album_data[0].item.title, 
              'track': track_data[0].item.title,
-             'url': a.get_url() }
+             'url': a.get_url(),
+             'pic': a.get_cover_image(), 
+           }
     return info

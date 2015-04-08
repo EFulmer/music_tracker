@@ -40,6 +40,5 @@ class EmailPasswordForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
 
 
-# TODO remove superfluous form.
-class ArtistInfoForm(Form):
-    submit = SubmitField('Track Artist')
+# class ArtistInfoForm(Form):
+#     submit = SubmitField('Track Artist')
