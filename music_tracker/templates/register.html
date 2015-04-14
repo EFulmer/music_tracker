@@ -1,15 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<!--<form action="{{ url_for('register') }}" method="POST">
-    {{ form.csrf_token }}
-    Email:
-    {{ form.email }}
-    Password:
-    {{ form.password }}
-    <input type="submit">
-</form> -->
-
 <div class="container">
 	<form class="form-horizontal" action="{{ url_for('register') }}" method=post name="">
 		{{ form.csrf_token }}
