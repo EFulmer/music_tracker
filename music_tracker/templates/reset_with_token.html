@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form action="{{ url_for('reset_with_token', token=token) }}", method="POST">
-    {{ form.password.label }}: {{ form.password }}<br>
+<form class="form-horizontal" action="{{ url_for('reset_with_token', token=token) }}", method="POST">
+	<div class="control-group">
+		<label class="control-label">{{ form.password.label }}</label>: <label class="controls">{{ form.password }}</label>
+	</div>
     {{ form.csrf_token }}
-    <input type="submit", value="Change my password" />
+    <div class="control-group">
+	    <label class="controls"><input type="submit", value="Change my password" /></label>
+    </div>
 </form>
 {% endblock %}
