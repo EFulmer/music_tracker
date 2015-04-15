@@ -1,17 +1,35 @@
 {% extends "layout.html" %}
 {% block body %}
-<form action="" method="POST">
-    {{ form.hidden_tag() }}
-    {{ info['artist'] }}
-    <br>
-    Bio (courtesy of Last.fm): {{ info['bio'] }}
-    <br>
-    Top Album: {{ info['album'] }}
-    <br>
-    Top Track: {{ info['track'] }}
-    <br>
+
+<div class="container-fluid">
+	<form class="form-horizontal" action="" method=post name="">
+		{{ form.hidden_tag() }}
+		<!-- TODO: Center artist name. -->
+		<div class="control-group">
+			<label class="control-label">{{ info['artist'] }}</label>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Bio:</label>
+			<label class="controls">{{ info['bio'] }}</label>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Top Album:</label>
+			<label class="controls">{{ info['album'] }}</label>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Top Track:</label>
+			<label class="controls">{{ info['track'] }}</label>
+		</div>
+		<div class="control-group">
+			<label class="controls"><a href="{{ info['url'] }}">{{ info['artist'] }} on Last.fm</a></label>
+		</div>
+		</div>
+	</form>
+</div>
+
+<!-- <form action="" method="POST">
     <a href={{ info['url'] }}>{{ info['artist'] }} on Last.fm</a>
     <br>
     {{ form.submit }}
-</form>
+</form> -->
 {% endblock %}
