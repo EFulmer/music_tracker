@@ -1,41 +1,105 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        {% if title %}
-            <title>{{ title }}</title>
-        {% else %}
-            <title>Eric's Music Tracker</title>
-        {% endif %}
-        <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
-        <script src="http://code.jquery.com/jquery-latest.js"></script>
-        <script src="/static/js/bootstrap.min.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-    	<div class="container">
-		<div class="navbar">
-		    <div class="navbar-inner">
-			    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-				    <span class="icon-bar"></span>
-			    </a>
-			    <a class="brand" href="/">Eric's Music Tracker</a>
-			    <ul class="nav">
-				    <!-- TODO Login checks -->
-				    <li><a href="{{ url_for('index') }}">Home</a></li>
-				    <li><a href="{{ url_for('manage_artists') }}">My Artists</a></li>
-				    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
-			    </div>
-		    </div>
-	    </div>
-	    <div class="row">
-		    <div class="span12">
-			    {% block body %}{% endblock %}
-		    </div>
-	    </div>
-    </div>
-    </body>
-    </html>
+<head>
+{% if title %}
+<title>{{ title }}</title>
+{% else %}
+<title>Eric's Music Tracker</title>
+{% endif %}
+<link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style type="text/css">
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      .container {
+        width: auto;
+        max-width: 680px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+</style>  
+</head>
+<body>
+<div id="wrap">
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container">
+				<button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse" type="button">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="brand" href="/">Eric's Music Tracker</a>
+				<div class="nav-collapse collapse">
+					<ul class="nav">
+						<li><a href="{{ url_for('index') }}">Home</a></li>
+						{% if current_user.is_authenticated() %}
+						<li><a href="{{ url_for('manage_artists') }}">My Artists</a></li>
+						<li><a href="{{ url_for('logout') }}">Log Out</a></li>
+						{% else %}
+						<li><a href="{{ url_for('register') }}">Register</a>
+						<li><a href="{{ url_for('login') }}">Log In</a>
+						<li><a href="{{ url_for('reset_password') }}">Reset Password</a>
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% block body %}{% endblock %}
+	<div id="push"></div>
+</div>
+<div id="footer">
+	<div class="container">
+		<p class="muted credit">
+		This site was written in <a href="https://www.python.org/">Python</a> using <a href="http://flask.pocoo.org/">Flask</a>! Find the source <a href="https://github.com/EFulmer/music_tracker/">here</a> on GitHub!
+		</p>
+	</div>
+</div>
+</body>
 </html>

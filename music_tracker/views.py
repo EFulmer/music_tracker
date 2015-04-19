@@ -19,7 +19,7 @@ from .util import ts
 # TODO literally everything
 @app.route('/')
 def index():
-    return 'under construction'
+    return render_template('index.html')
 
 
 # shamelessly stolen from Explore Flask
@@ -89,7 +89,7 @@ def login():
 
 
 @app.route('/reset/', methods=('GET', 'POST'))
-def reset():
+def reset_password():
     form = EmailForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first_or_404()
@@ -129,20 +129,20 @@ def reset_wth_token(token):
 @login_required
 def logout():
     logout_user()
+    flash("You've been logged out.")
     return redirect(url_for('index'))
 
 
 @app.route('/add/', methods=('GET', 'POST'))
 @login_required
 def find_artist():
-    # TODO errors if not valid
+    print current_user.is_authenticated()
     form = EnterArtistForm()
     if form.validate_on_submit():
         return redirect('/artist/' + form.artist.raw_data[0])
     return render_template('add.html', form=form)
 
 
-# TODO error check
 @app.route('/artist/<string:artist>', methods=('GET', 'POST'))
 @login_required
 def artist_info(artist):
@@ -155,7 +155,6 @@ def artist_info(artist):
     form.submit.label.text = form.submit.label.text.format(name)
 
     if form.validate_on_submit():
-        # TODO dummy user id
         user_artist = UsersArtist(user=current_user.id, artist_name=name, 
                 best_album=info['album'], best_song=info['track'],
                 date_added=datetime.datetime.now(), active=True)
