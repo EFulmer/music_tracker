@@ -7,7 +7,11 @@
             <h1>
                 Manage Your Artists
             </h1>
-            <a href="/my_artists/all/">Show all artists</a>
+            {% if not all %}
+                <a href="/my_artists/all/">Show all artists, including archived</a>
+            {% else %}
+                <a href="/my_artists/">Only show unarchived artists</a>
+            {% endif %}
         </div>
 {% if artists %}
 <form class="container" action="" method="">
@@ -28,6 +32,7 @@
 			<td>{{ artist.date_added }}</td>
             		{% if not artist.active %}
                 		<td><a href="/my_artists/unarchive/{{ artist.id }}">Unarchive</a></td>
+                		<td><a href="/my_artists/delete/{{ artist.id }}">Delete</a></td>
             		{% else %}
                 		<td><a href="/my_artists/archive/{{ artist.id }}">Archive</a></td>
             		{% endif %}

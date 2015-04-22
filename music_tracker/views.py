@@ -170,7 +170,7 @@ def artist_info(artist):
 def manage_artists():
     artists = UsersArtist.query.filter(UsersArtist.user == current_user.id) \
                                .filter(UsersArtist.active).all()
-    return render_template('manage_list.html', artists=artists)
+    return render_template('manage_list.html', artists=artists, all=False)
 
 
 @app.route('/my_artists/all/', methods=('GET',))
@@ -178,7 +178,7 @@ def manage_artists():
 def all_artists():
     artists = UsersArtist.query.filter(UsersArtist.user == current_user.id)\
                                .all()
-    return render_template('manage_list.html', artists=artists)
+    return render_template('manage_list.html', artists=artists, all=True)
 
 
 @app.route('/my_artists/archive/<int:artist_id>', methods=('GET', 'POST'))
@@ -192,6 +192,7 @@ def archive_artist(artist_id):
 
 
 @app.route('/my_artists/unarchive/<int:artist_id>', methods=('GET', 'POST'))
+@login_required
 def unarchive_artist(artist_id):
     artist = UsersArtist.query.get(artist_id)
     artist.active = True
@@ -199,3 +200,13 @@ def unarchive_artist(artist_id):
     flash('{} unarchived.'.format(artist.artist_name))
     return redirect(url_for('manage_artists'))
 
+
+# TODO: See how to issue a warning that deletion is permanent.
+@app.route('/my_artists/delete/<int:artist_id>', methods=('GET', 'POST'))
+@login_required
+def delete_artist(artist_id):
+    artist = UsersArtist.query.get(artist_id)
+    db.session.delete(artist)
+    db.session.commit()
+    flash('{} deleted.'.format(artist.artist_name))
+    return redirect(url_for('manage_artists'))
