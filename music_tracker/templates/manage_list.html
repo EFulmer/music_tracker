@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<!-- TODO Link to "add artist" page! -->
-<!-- TODO Link to "all" page! -->
 <div class="container">
 	{% include 'flash.html' %}
-	<div class="page-header">
+        <div class="page-header">
             <h1>
                 Manage Your Artists
-		</h1>
-	</div>
+            </h1>
+            <a href="/my_artists/all/">Show all artists</a>
+        </div>
 {% if artists %}
 <form class="container" action="" method="">
 	<table class="table">
