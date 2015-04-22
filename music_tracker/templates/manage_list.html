@@ -1,10 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<!-- TODO Center this; simpler in Bootstrap 3 -->
+<!-- TODO Link to "add artist" page! -->
 <!-- TODO Link to "all" page! -->
-<form class="container" action="" method="">
+<div class="container">
 	{% include 'flash.html' %}
+	<div class="page-header">
+            <h1>
+                Manage Your Artists
+		</h1>
+	</div>
+{% if artists %}
+<form class="container" action="" method="">
 	<table class="table">
 		<thead>
 			<tr>
@@ -29,6 +36,9 @@
 		{% endfor %}
 	</table>
 </form>
+{% else %}
+It looks like you don't have any artists tracked. <a href="/add/">Why not change that?</a>
+{% endif %}
 </div>
 
 {% endblock %}
