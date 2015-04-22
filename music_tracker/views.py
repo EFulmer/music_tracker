@@ -201,7 +201,6 @@ def unarchive_artist(artist_id):
     return redirect(url_for('manage_artists'))
 
 
-# TODO: See how to issue a warning that deletion is permanent.
 @app.route('/my_artists/delete/<int:artist_id>', methods=('GET', 'POST'))
 @login_required
 def delete_artist(artist_id):
