@@ -1,28 +1,27 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div class="container-fluid">
-	<form class="form-horizontal" action="" method=post name="">
+<div class="container">
+	<form class="container" action="" method=post name="">
+        <table class="table">
 		{{ form.hidden_tag() }}
-		<!-- TODO: Center artist name. -->
-		<div class="control-group">
-			<label class="control-label">{{ info['artist'] }}</label>
-		</div>
-		<div class="control-group">
-			<label class="control-label">Bio:</label>
-			<label class="controls">{{ info['bio'] }}</label>
-		</div>
-		<div class="control-group">
-			<label class="control-label">Top Album:</label>
-			<label class="controls">{{ info['album'] }}</label>
-		</div>
-		<div class="control-group">
-			<label class="control-label">Top Track:</label>
-			<label class="controls">{{ info['track'] }}</label>
-		</div>
-		<div class="control-group">
-			<label class="controls"><a href="{{ info['url'] }}">{{ info['artist'] }} on Last.fm</a></label>
-		</div>
+                <tr>
+                    <td><h1>{{ info['artist'] }}</h1></td>
+                </tr>
+                <tr>
+                    <td>Bio:</td>
+                    <td>{{ info['bio'] }}</td>
+                </tr>
+                <tr>
+                    <td>Top Album:</td>
+                    <td>{{ info['album'] }}</td>
+		</tr>
+                <tr>
+                    <td>Top Track:</td>
+                    <td>{{ info['track'] }}</td>
+		</td>
+            </table>
+                    <a href="{{ info['url'] }}">{{ info['artist'] }} on Last.fm</a></td>
 		<div class="control-group">
 			<label class="controls"> {{ form.submit }} </label>
 		</div>
