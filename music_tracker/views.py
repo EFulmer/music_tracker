@@ -78,10 +78,10 @@ def login():
         if user.is_correct_password(form.password.data):
             login_user(user)
 
-            flash('logged in')
+            flash("You've been logged in!")
             return redirect(url_for('index'))
         else:
-            flash('error')
+            flash("Please check your password.")
             return redirect(url_for('login'))
 
     return render_template('login.html', form=form)
