@@ -26,7 +26,7 @@ def index():
 def register():
     form = EmailPasswordForm()
     if form.validate_on_submit():
-        email = form.email.data
+        email = form.email.data.lower()
         try:
             user = User(email=email, password=form.password.data)
             db.session.add(user)
@@ -43,7 +43,7 @@ def register():
 
             flash('Account created! Check your email for a confirmation ' \
                     'message to activate your account.')
-            return redirect(url_for('index'))
+            return redirect(url_for('login'))
         except:
             db.session.rollback()
             flash('There is already an email account for {}.'.format(email))
@@ -73,7 +73,8 @@ def login():
     form = EmailPasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first_or_404()
+        user = User.query.filter_by(email=form.email.data.lower()) \
+                   .first_or_404()
 
         if user.is_correct_password(form.password.data):
             login_user(user)
@@ -81,7 +82,7 @@ def login():
             flash("You've been logged in!")
             return redirect(url_for('index'))
         else:
-            flash("Please check your password.")
+            flash("Sorry, but your password was incorrect.")
             return redirect(url_for('login'))
 
     return render_template('login.html', form=form)

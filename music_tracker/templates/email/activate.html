@@ -1,18 +1,12 @@
-{% extends "layout.html" %}
-{% block body %}
+Your account was successfully created. Please click the link below<br>
+to confirm your email address and activate your account:
+	
+<p>
+<a href="{{ confirm_url }}">{{ confirm_url }}</a>
+</p>
 
-<div class="container-fluid">
-	Your account was successfully reated. Please click the link below<br>
-	to confirm your email address and activate your account:
-	
-	<p>
-	<a href="{{ confirm_url }}">{{ confirm_url }}</a>
-	</p?
-	
-	<p>
-	--<br>
-	Questions? Comments? Email ericsmusictracker@gmail.com
-	</p>
+<p>
+--<br>
+Questions? Comments? Email ericsmusictracker@gmail.com
+</p>
 </div>
-
-{% endblock %}
