@@ -1,13 +1,17 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<div class="container-fluid">
+<div class="container">
+	<div class="page-header">
+		<h1>
+			Register
+		</h1>
+	</div>
 	<form class="form-horizontal" action="{{ url_for('register') }}" method=post name="">
 		{{ form.csrf_token }}
         	<div class="control-group">
             		<label class="control-label" for="/add/">Email:</label>
             		<div class="controls">{{ form.email }}</div>
-            		<!-- TODO Figure out how to add a bit of space between the textare and button. -->
             		<label class="control-label" for="/add/">Password:</label>
             		<div class="controls">{{ form.password }}</div>
 			<div class="controls"><input type="submit" value="Sign me up!"></div>

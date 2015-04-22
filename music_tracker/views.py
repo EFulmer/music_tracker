@@ -16,7 +16,6 @@ from .models import ArtistInfo, User, UsersArtist
 from .util import ts
 
 
-# TODO literally everything
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -77,12 +76,12 @@ def login():
         user = User.query.filter_by(email=form.email.data).first_or_404()
 
         if user.is_correct_password(form.password.data):
-            print 'pass'
             login_user(user)
 
+            flash('logged in')
             return redirect(url_for('index'))
         else:
-            print 'fail'
+            flash('error')
             return redirect(url_for('login'))
 
     return render_template('login.html', form=form)
