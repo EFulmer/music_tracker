@@ -12,16 +12,15 @@ network = pylast.LastFMNetwork(api_key=app.config['API_KEY'],
 
 def get_artist_info(artist):
     """
-    Get a Pylast object representing the artist's top album.
-    The object contains other relevant metadata (proper name, etc)
+    Get a dict containing the name of artist's top album and other 
+    relevant metadata (proper name, etc.).
     """
     info = {}
     a = network.get_artist(artist)
     album_data = a.get_top_albums()
     track_data = a.get_top_tracks()
     bio = a.get_bio('summary')
-    # TODO remove Last.fm link; either remove or linkify links in 
-    # bio
+    bio = bio[:bio.find('<a href=')].strip()
     info = { 'artist': track_data[0].item.artist, 
              'bio': bio, 
              'album': album_data[0].item.title, 
