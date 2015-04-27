@@ -79,6 +79,7 @@
 					<ul class="nav">
 						<li><a href="{{ url_for('index') }}">Home</a></li>
 						{% if current_user.is_authenticated() %}
+						<li><a href="{{ url_for('find_artist') }}">Add Artists</a></li>
 						<li><a href="{{ url_for('manage_artists') }}">My Artists</a></li>
 						<li><a href="{{ url_for('logout') }}">Log Out</a></li>
 						{% else %}
