@@ -149,7 +149,12 @@ def artist_info(artist):
     form = AddArtistForm()
     name = artist.replace('_', ' ')
 
-    info = lastfm.get_artist_info(name)
+    try:
+        info = lastfm.get_artist_info(name)
+    except:
+        flash(name + " isn't on last.fm! bummer!")
+        return redirect('/add/')
+
     name = str(info['artist'])
 
     form.submit.label.text = form.submit.label.text.format(name)

@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="container-fluid">
+<div class="container">
+    {% include 'flash.html' %}
     <form class="form-horizontal" action="" method="post" name="/add/">
         {{ form.hidden_tag() }}
         <div class="control-group">
             <label class="control-label" for="/add/">Artist name:</label>
             <div class="controls">{{ form.artist }}</div>
-            <!-- TODO Figure out how to add a bit of space between the textare and button. -->
             <div class="controls">{{ form.submit }}</div>
         </div>
     </form>
