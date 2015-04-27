@@ -214,3 +214,7 @@ def delete_artist(artist_id):
     db.session.commit()
     flash('{} deleted.'.format(artist.artist_name))
     return redirect(url_for('manage_artists'))
+
+@app.route('/about/')
+def about():
+    return render_template('about.html')
