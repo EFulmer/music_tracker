@@ -102,7 +102,7 @@ def reset_password():
 
         return redirect(url_for('index'))
 
-    return render_template('reset.html', form=form)
+    return render_template('reset_with_token.html', form=form)
 
 
 @app.route('/reset/<token>', methods=('GET', 'POST',))
