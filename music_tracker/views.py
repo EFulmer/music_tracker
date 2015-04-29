@@ -96,7 +96,7 @@ def reset_password():
         
         subject = 'Password reset requested'
         token = ts.dumps(form.email.data, salt='recover-key')
-        recover_url = url_for('reset_with_token', token=token, _external=True)
+        recover_url = url_for('reset_password', token=token, _external=True)
         html = render_template('email/recover.html', recover_url=recover_url)
         send_email(user.email, subject, html)
 
