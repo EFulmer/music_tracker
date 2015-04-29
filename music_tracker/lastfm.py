@@ -6,8 +6,13 @@ import pylast
 from . import app
 
 
-network = pylast.LastFMNetwork(api_key=app.config['API_KEY'], 
-    api_secret=app.config['API_SECRET'])
+try:
+    network = pylast.LastFMNetwork(api_key=app.config['API_KEY'], 
+        api_secret=app.config['API_SECRET'])
+except:
+    # no methods used here need authentication via secret key
+    network = pylast.LastFMNetwork(api_key=app.config['API_KEY'],
+            api_secret='')
 
 
 def get_artist_info(artist):
