@@ -19,9 +19,6 @@ from flask.ext.bcrypt import Bcrypt
 
 bcrypt = Bcrypt(app)
 
-from . import views
-from .models import User
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -29,3 +26,6 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(userid):
     return User.query.filter(User.id==userid).first()
+
+from . import views
+from .models import User
