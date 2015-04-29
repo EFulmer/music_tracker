@@ -1,18 +1,19 @@
 # music_tracker/lastfm.py
 # -*- coding: utf-8 -*-
 
+import os
 import pylast
 
 from . import app
 
 
+# on heroku these are contained in environment variables
 try:
     network = pylast.LastFMNetwork(api_key=app.config['API_KEY'], 
         api_secret=app.config['API_SECRET'])
 except:
-    # no methods used here need authentication via secret key
-    network = pylast.LastFMNetwork(api_key=app.config['API_KEY'],
-            api_secret='')
+    network = pylast.LastFMNetwork(api_key=os.environ.get('API_KEY'),
+        api_secret=os.environ.get('API_SECRET'))
 
 
 def get_artist_info(artist):
