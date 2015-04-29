@@ -1,13 +1,19 @@
 # music_tracker/__init__.py
 # -*- coding: utf-8 -*-
+import os
+
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.wtf.csrf import CsrfProtect
 from flask.ext.login import LoginManager
 from flask.ext.mail import Mail
 
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_object('config')
+if os.environ.get('HEROKU'):
+    app = Flask(__name__)
+else:
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_object('config')
+
 app.config.from_pyfile('config.py')
 CsrfProtect(app)
 
