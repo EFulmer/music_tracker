@@ -30,8 +30,9 @@ def register():
         email = form.email.data.lower()
 
         # check if user is already registered
-        if User.query.filter(User.email): 
-            flash('There is already an account for {}'.format(email))
+        if User.query.filter_by(email=email).first(): 
+            flash('There is already an account for {}. ' \
+                      'Try logging in instead!'.format(email))
         else:
             try:
                 user = User(email=email, password=form.password.data)
