@@ -4,7 +4,8 @@
 import datetime
 
 from flask import abort, flash, render_template, redirect, request, url_for
-from flask.ext.login import current_user, login_required, login_user
+from flask.ext.login import current_user, login_required, login_user, \
+        logout_user
 from flask.ext.mail import Message
 from sqlalchemy.exc import IntegrityError
 
@@ -27,26 +28,34 @@ def register():
     form = EmailPasswordForm()
     if form.validate_on_submit():
         email = form.email.data.lower()
-        try:
-            user = User(email=email, password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            token = ts.dumps(form.email.data, salt='email-confirm-key')
-            confirm_url = url_for('confirm_email', token=token, 
-                    _external=True)
-            html = render_template('email/activate.html', 
-                    confirm_url=confirm_url)
 
-            msg = Message(subject='Confirm your email', recipients=[email,], 
-                    html=html, sender='ericsmusictracker@gmail.com')
-            mail.send(msg)
+        # check if user is already registered
+        if User.query.get(email): 
+            flash('there is already an account for {}'.format(email))
+        else:
+            try:
+                user = User(email=email, password=form.password.data)
+                User.query.get(email)
+                db.session.add(user)
+                db.session.commit()
+                token = ts.dumps(form.email.data, salt='email-confirm-key')
+                confirm_url = url_for('confirm_email', token=token, 
+                        _external=True)
+                html = render_template('email/activate.html', 
+                        confirm_url=confirm_url)
 
-            flash('Account created! Check your email for a confirmation ' \
-                    'message to activate your account.')
-            return redirect(url_for('login'))
-        except:
-            db.session.rollback()
-            flash('There is already an email account for {}.'.format(email))
+                msg = Message(subject='Confirm your email', 
+                        recipients=[email,], 
+                        html=html, sender='ericsmusictracker@gmail.com')
+                mail.send(msg)
+
+                flash('Account created! Check your email for a confirmation ' \
+                        'message to activate your account.')
+                return redirect(url_for('login'))
+            except Exception as e:
+                # TODO make this less bad.
+                flash('Exception encountered: {}'.format(e.message))
+                db.session.rollback()
 
     return render_template('register.html', form=form)
 
@@ -100,13 +109,14 @@ def reset_password():
         html = render_template('email/recover.html', recover_url=recover_url)
         send_email(user.email, subject, html)
 
+        # TODO flash
         return redirect(url_for('index'))
 
-    return render_template('reset_with_token.html', form=form)
+    return render_template('reset.html', form=form)
 
 
 @app.route('/reset/<token>', methods=('GET', 'POST',))
-def reset_wth_token(token):
+def reset_with_token(token):
     try:
         email = ts.loads(token, salt='recover-key', max_age=86400)
     except:
