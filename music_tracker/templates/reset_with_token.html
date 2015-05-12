@@ -1,13 +1,21 @@
 {% extends "layout.html" %}
-
 {% block body %}
-<form class="form-horizontal" action="{{ url_for('reset_with_token', token=token) }}", method="POST">
-	<div class="control-group">
-		<label class="control-label">{{ form.password.label }}</label>: <label class="controls">{{ form.password }}</label>
+
+<div class="container">
+	<div class="page-header">
+		<h1>
+			New Password
+		</h1>
 	</div>
-    {{ form.csrf_token }}
-    <div class="control-group">
-	    <label class="controls"><input type="submit", value="Change my password" /></label>
-    </div>
-</form>
+	{% include 'flash.html' %}
+	<form class="form-horizontal" action="{{ url_for('reset_with_token', token=token) }}" method=post name="">
+		{{ form.csrf_token }}
+        	<div class="control-group">
+                    <label class="control-label">{{ form.password.label }}</label>
+            		<div class="controls">{{ form.password }}</div>
+			<div class="controls"><input type="submit" value="Change My Password"></div>
+        	</div>
+	</form>
+</div>
+
 {% endblock %}

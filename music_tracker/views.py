@@ -125,19 +125,19 @@ def reset_password():
 @app.route('/reset/<token>', methods=('GET', 'POST',))
 def reset_with_token(token):
     try:
-        email = ts.loads(token, salt='recover-key', max_age=86400)
+        email = ts.loads(token, salt='recover-key', max_age=86400).lower()
     except:
         abort(404)
 
     form = PasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email.lower()).first_or_404()
+        user = User.query.filter_by(email=email).first_or_404()
         user.password = form.password.data
         db.session.add(user)
         db.session.commit()
 
-        return redirect(url_for('signin'))
+        return redirect(url_for('login'))
 
     return render_template('reset_with_token.html', form=form, token=token)
 
