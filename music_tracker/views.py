@@ -36,9 +36,9 @@ def register():
         else:
             try:
                 user = User(email=email, password=form.password.data)
-                User.query.get(email)
                 db.session.add(user)
                 db.session.commit()
+
                 token = ts.dumps(form.email.data, salt='email-confirm-key')
                 confirm_url = url_for('confirm_email', token=token, 
                         _external=True)
