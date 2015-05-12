@@ -23,7 +23,7 @@ class EmailForm(Form):
     email = TextField('Email', validators=[Required(), Email()])
 
 class PasswordForm(Form):
-    password = PasswordField('Email', validators=[Required()])
+    password = PasswordField('Password', validators=[Required()])
 
 class EnterArtistForm(Form):
     artist = StringField('artist', validators=[DataRequired()])
@@ -39,6 +39,3 @@ class EmailPasswordForm(Form):
     email    = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
 
-
-# class ArtistInfoForm(Form):
-#     submit = SubmitField('Track Artist')

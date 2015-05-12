@@ -97,20 +97,26 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/reset/', methods=('GET', 'POST'))
+@app.route('/forgot_pw/', methods=('GET', 'POST'))
 def reset_password():
     form = EmailForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data.lower()) \
+        email = form.email.data.lower()
+        user = User.query.filter_by(email=email) \
                 .first_or_404()
         
-        subject = 'Password reset requested'
         token = ts.dumps(form.email.data, salt='recover-key')
-        recover_url = url_for('reset_password', token=token, _external=True)
+        recover_url = url_for('reset_with_token', token=token, _external=True)
         html = render_template('email/recover.html', recover_url=recover_url)
-        send_email(user.email, subject, html)
+
+        msg = Message(subject='Password reset requested', 
+                      recipients=[email,], 
+                      html=html, sender='ericsmusictracker@gmail.com')
+        mail.send(msg)
 
         # TODO flash
+        flash('An email has been sent to {}. Please follow its instructions' \
+                  ' to reset your password.'.format(email))
         return redirect(url_for('index'))
 
     return render_template('reset.html', form=form)
