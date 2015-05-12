@@ -30,7 +30,7 @@ def register():
         email = form.email.data.lower()
 
         # check if user is already registered
-        if User.query.get(email): 
+        if User.query.filter(User.email): 
             flash('there is already an account for {}'.format(email))
         else:
             try:
