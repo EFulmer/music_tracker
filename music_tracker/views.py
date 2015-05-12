@@ -31,7 +31,7 @@ def register():
 
         # check if user is already registered
         if User.query.filter(User.email): 
-            flash('there is already an account for {}'.format(email))
+            flash('There is already an account for {}'.format(email))
         else:
             try:
                 user = User(email=email, password=form.password.data)
@@ -101,7 +101,8 @@ def login():
 def reset_password():
     form = EmailForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first_or_404()
+        user = User.query.filter_by(email=form.email.data.lower()) \
+                .first_or_404()
         
         subject = 'Password reset requested'
         token = ts.dumps(form.email.data, salt='recover-key')
@@ -125,7 +126,7 @@ def reset_with_token(token):
     form = PasswordForm()
 
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email).first_or_404()
+        user = User.query.filter_by(email=email.lower()).first_or_404()
         user.password = form.password.data
         db.session.add(user)
         db.session.commit()
